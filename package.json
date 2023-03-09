@@ -1,0 +1,8 @@
+{
+  "name" : "test712",
+  "version" : "1.0.0",
+  "description" : "Test TP 7.1.2",
+  "dependencies" : {
+    "@teipublisher/pb-components" : "1.24.18"
+  }
+}
