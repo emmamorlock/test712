@@ -4,18 +4,18 @@ xquery version "3.1";
  : A set of helper functions to access the application context from
  : within a module.
  :)
-module namespace config="http://www.tei-c.org/tei-simple/config";
+module namespace config = "http://www.tei-c.org/tei-simple/config";
 
-import module namespace http="http://expath.org/ns/http-client" at "java:org.exist.xquery.modules.httpclient.HTTPClientModule";
-import module namespace nav="http://www.tei-c.org/tei-simple/navigation" at "navigation.xql";
-import module namespace tpu="http://www.tei-c.org/tei-publisher/util" at "lib/util.xql";
+import module namespace http = "http://expath.org/ns/http-client" at "java:org.exist.xquery.modules.httpclient.HTTPClientModule";
+import module namespace nav = "http://www.tei-c.org/tei-simple/navigation" at "navigation.xql";
+import module namespace tpu = "http://www.tei-c.org/tei-publisher/util" at "lib/util.xql";
 
-declare namespace templates="http://exist-db.org/xquery/html-templating";
+declare namespace templates = "http://exist-db.org/xquery/html-templating";
 
-declare namespace repo="http://exist-db.org/xquery/repo";
-declare namespace expath="http://expath.org/ns/pkg";
-declare namespace jmx="http://exist-db.org/jmx";
-declare namespace tei="http://www.tei-c.org/ns/1.0";
+declare namespace repo = "http://exist-db.org/xquery/repo";
+declare namespace expath = "http://expath.org/ns/pkg";
+declare namespace jmx = "http://exist-db.org/jmx";
+declare namespace tei = "http://www.tei-c.org/ns/1.0";
 
 (:~~
  : The version of the pb-components webcomponents library to be used by this app.
@@ -34,7 +34,7 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
  : In this case, change $config:webcomponents-cdn to point to http://localhost:port 
  : (default: 8000, but check where your server is running).
  :)
-declare variable $config:webcomponents :="1.24.18";
+declare variable $config:webcomponents := "1.24.18";
 
 (:~
  : CDN URL to use for loading webcomponents. Could be changed if you created your
@@ -50,7 +50,7 @@ declare variable $config:webcomponents-cdn := "https://cdn.jsdelivr.net/npm/@tei
  : against the Origin header sent by the browser.
  :)
 declare variable $config:origin-whitelist := (
-    "(?:https?://localhost:.*|https?://127.0.0.1:.*)"
+"(?:https?://localhost:.*|https?://127.0.0.1:.*)"
 );
 
 (:~
@@ -69,18 +69,18 @@ declare variable $config:default-language := "en";
  : the parameters below for further configuration), or 'page' to browse
  : a document by actual pages determined by TEI pb elements.
  :)
-declare variable $config:default-view :="div";
+declare variable $config:default-view := "div";
 
 (:
  : The default HTML template used for viewing document content. This can be
  : overwritten by the teipublisher processing instruction inside a TEI document.
  :)
-declare variable $config:default-template :="view.html";
+declare variable $config:default-template := "view.html";
 
 (:
  : The element to search by default, either 'tei:div' or 'tei:text'.
  :)
-declare variable $config:search-default :="tei:div";
+declare variable $config:search-default := "tei:div";
 
 (:
  : Defines which nested divs will be displayed as single units on one
@@ -117,16 +117,27 @@ declare variable $config:facets := [
         "heading": "facets.language",
         "max": 5,
         "hierarchical": false(),
-        "output": function($label) {
-            switch($label)
-                case "de" return "German"
-                case "es" return "Spanish"
-                case "la" return "Latin"
-                case "fr" return "French"
-                case "en" return "English"
-                default return $label
-        }
+        "output": function ($label) {
+            switch ($label)
+                case "de"
+                    return
+                        "German"
+                case "es"
+                    return
+                        "Spanish"
+                case "la"
+                    return
+                        "Latin"
+                case "fr"
+                    return
+                        "French"
+                case "en"
+                    return
+                        "English"
+                default return
+                    $label
     }
+}
 ];
 
 (:
@@ -164,58 +175,78 @@ declare variable $config:login-domain := "org.exist.tei-simple";
  : are the font directories.
  :)
 declare variable $config:fop-config :=
-    let $fontsDir := config:get-fonts-dir()
-    return
-        <fop version="1.0">
-            <!-- Strict user configuration -->
-            <strict-configuration>true</strict-configuration>
-
-            <!-- Strict FO validation -->
-            <strict-validation>false</strict-validation>
-
-            <!-- Base URL for resolving relative URLs -->
-            <base>./</base>
-
-            <renderers>
-                <renderer mime="application/pdf">
-                    <fonts>
+let $fontsDir := config:get-fonts-dir()
+return
+    <fop
+        version="1.0">
+        <!-- Strict user configuration -->
+        <strict-configuration>true</strict-configuration>
+        
+        <!-- Strict FO validation -->
+        <strict-validation>false</strict-validation>
+        
+        <!-- Base URL for resolving relative URLs -->
+        <base>./</base>
+        
+        <renderers>
+            <renderer
+                mime="application/pdf">
+                <fonts>
                     {
-                        if ($fontsDir) then (
-                            <font kerning="yes"
+                        if ($fontsDir) then
+                            (
+                            <font
+                                kerning="yes"
                                 embed-url="file:{$fontsDir}/Junicode.ttf"
                                 encoding-mode="single-byte">
-                                <font-triplet name="Junicode" style="normal" weight="normal"/>
+                                <font-triplet
+                                    name="Junicode"
+                                    style="normal"
+                                    weight="normal"/>
                             </font>,
-                            <font kerning="yes"
+                            <font
+                                kerning="yes"
                                 embed-url="file:{$fontsDir}/Junicode-Bold.ttf"
                                 encoding-mode="single-byte">
-                                <font-triplet name="Junicode" style="normal" weight="700"/>
+                                <font-triplet
+                                    name="Junicode"
+                                    style="normal"
+                                    weight="700"/>
                             </font>,
-                            <font kerning="yes"
+                            <font
+                                kerning="yes"
                                 embed-url="file:{$fontsDir}/Junicode-Italic.ttf"
                                 encoding-mode="single-byte">
-                                <font-triplet name="Junicode" style="italic" weight="normal"/>
+                                <font-triplet
+                                    name="Junicode"
+                                    style="italic"
+                                    weight="normal"/>
                             </font>,
-                            <font kerning="yes"
+                            <font
+                                kerning="yes"
                                 embed-url="file:{$fontsDir}/Junicode-BoldItalic.ttf"
                                 encoding-mode="single-byte">
-                                <font-triplet name="Junicode" style="italic" weight="700"/>
+                                <font-triplet
+                                    name="Junicode"
+                                    style="italic"
+                                    weight="700"/>
                             </font>
-                        ) else
+                            )
+                        else
                             ()
                     }
-                    </fonts>
-                </renderer>
-            </renderers>
-        </fop>
+                </fonts>
+            </renderer>
+        </renderers>
+    </fop>
 ;
 
 (:~
  : The command to run when generating PDF via LaTeX. Should be a sequence of
  : arguments.
  :)
-declare variable $config:tex-command := function($file) {
-    ( "/usr/local/bin/pdflatex", "-interaction=nonstopmode", $file )
+declare variable $config:tex-command := function ($file) {
+    ("/usr/local/bin/pdflatex", "-interaction=nonstopmode", $file)
 };
 
 (:
@@ -223,7 +254,7 @@ declare variable $config:tex-command := function($file) {
  : as working director.
  :)
 declare variable $config:tex-temp-dir :=
-    util:system-property("java.io.tmpdir");
+util:system-property("java.io.tmpdir");
 
 (:~
  : Configuration for epub files.
@@ -261,18 +292,18 @@ declare variable $config:epub-images-path := ();
     Determine the application root collection from the current module load path.
 :)
 declare variable $config:app-root :=
-    let $rawPath := system:get-module-load-path()
-    let $modulePath :=
-        (: strip the xmldb: part :)
-        if (starts-with($rawPath, "xmldb:exist://")) then
-            if (starts-with($rawPath, "xmldb:exist://embedded-eXist-server")) then
-                substring($rawPath, 36)
-            else
-                substring($rawPath, 15)
-        else
-            $rawPath
-    return
-        substring-before($modulePath, "/modules")
+let $rawPath := system:get-module-load-path()
+let $modulePath :=
+(: strip the xmldb: part :)
+if (starts-with($rawPath, "xmldb:exist://")) then
+    if (starts-with($rawPath, "xmldb:exist://embedded-eXist-server")) then
+        substring($rawPath, 36)
+    else
+        substring($rawPath, 15)
+else
+    $rawPath
+return
+    substring-before($modulePath, "/modules")
 ;
 
 (:
@@ -280,15 +311,29 @@ declare variable $config:app-root :=
  : The default should work when running on top of a standard eXist installation,
  : but may need to be changed if the app is behind a proxy.
  :)
+(: modif to test docker faq :)
+(:
 declare variable $config:context-path :=
-   request:get-context-path() || substring-after($config:app-root, "/db")
-    (: "" :)
+request:get-context-path() || substring-after($config:app-root, "/db")
+(: "" :)
 ;
+:)
+
+declare variable $config:context-path :=
+    let $prop := util:system-property("teipublisher.context-path")
+    return
+        if (empty($prop) or $prop = "auto") then
+            request:get-context-path() || substring-after($config:app-root, "/db")
+        else
+            $prop
+;
+
+
 
 (:~
  : The root of the collection hierarchy containing data.
  :)
-declare variable $config:data-root :=$config:app-root || "/data";
+declare variable $config:data-root := $config:app-root || "/data";
 
 (:~
  : The root of the collection hierarchy whose files should be displayed
@@ -301,20 +346,20 @@ declare variable $config:data-default := $config:data-root;
  : documents displayed in the browsing view.
  :)
 declare variable $config:data-exclude :=
-    doc($config:data-root || "/taxonomy.xml")/tei:TEI
+doc($config:data-root || "/taxonomy.xml")/tei:TEI
 ;
 
 (:~
  : The main ODD to be used by default
  :)
-declare variable $config:default-odd :="teipublisher.odd";
+declare variable $config:default-odd := "teipublisher.odd";
 
 (:~
  : Complete list of ODD files used by the app. If you add another ODD to this list,
  : make sure to run modules/generate-pm-config.xql to update the main configuration
  : module for transformations (modules/pm-config.xql).
  :)
-declare variable $config:odd-available :=("teipublisher.odd");
+declare variable $config:odd-available := ("teipublisher.odd");
 
 (:~
  : List of ODD files which are used internally only, i.e. not for displaying information
@@ -330,7 +375,7 @@ declare variable $config:output-root := $config:app-root || "/" || $config:outpu
 
 declare variable $config:default-odd-for-docx := $config:default-odd;
 
-declare variable $config:default-docx-pi := ``[odd="`{$config:default-odd-for-docx}`"]``;
+declare variable $config:default-docx-pi := ``[odd="`{ $config:default-odd-for-docx }`"]``;
 
 declare variable $config:module-config := doc($config:odd-root || "/configuration.xml")/*;
 
@@ -346,43 +391,43 @@ declare variable $config:dts-collections := map {
     "id": "default",
     "title": $config:expath-descriptor/expath:title/string(),
     "memberCollections": (
-            map {
-                "id": "documents",
-                "title": "Document Collection",
-                "path": $config:data-default,
-                "members": function() {
-                    nav:get-root((), map {
-                        "leading-wildcard": "yes",
-                        "filter-rewrite": "yes"
-                    })
-                },
-                "metadata": function($doc as document-node()) {
-                    let $properties := tpu:parse-pi($doc, ())
-                    return
-                        map:merge((
-                            map:entry("title", nav:get-metadata($properties, $doc/*, "title")/string()),
-                            map {
-                                "dts:dublincore": map {
-                                    "dc:creator": string-join(nav:get-metadata($properties, $doc/*, "author"), "; "),
-                                    "dc:license": nav:get-metadata($properties, $doc/*, "license")
-                                }
-                            }
-                        ))
-                }
-            },
-            map {
-                "id": "odd",
-                "title": "ODD Collection",
-                "path": $config:odd-root,
-                "members": function() {
-                    collection($config:odd-root)/tei:TEI
-                },
-                "metadata": function($doc as document-node()) {
-                    map {
-                        "title": string-join($doc//tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type)], "; ")
+    map {
+        "id": "documents",
+        "title": "Document Collection",
+        "path": $config:data-default,
+        "members": function () {
+            nav:get-root((), map {
+                "leading-wildcard": "yes",
+                "filter-rewrite": "yes"
+            })
+        },
+        "metadata": function ($doc as document-node()) {
+            let $properties := tpu:parse-pi($doc, ())
+            return
+                map:merge((
+                map:entry("title", nav:get-metadata($properties, $doc/*, "title")/string()),
+                map {
+                    "dts:dublincore": map {
+                        "dc:creator": string-join(nav:get-metadata($properties, $doc/*, "author"), "; "),
+                        "dc:license": nav:get-metadata($properties, $doc/*, "license")
                     }
                 }
+                ))
+        }
+    },
+    map {
+        "id": "odd",
+        "title": "ODD Collection",
+        "path": $config:odd-root,
+        "members": function () {
+            collection($config:odd-root)/tei:TEI
+        },
+        "metadata": function ($doc as document-node()) {
+            map {
+                "title": string-join($doc//tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type)], "; ")
             }
+        }
+    }
     )
 };
 
@@ -407,7 +452,7 @@ declare variable $config:dts-import-collection := $config:data-default || "/play
 declare function config:collection-config($collection as xs:string?, $docUri as xs:string?) {
     (: Return empty sequence to use default config :)
     ()
-
+    
     (: 
      : Replace line above with the following code to switch between different view configurations per collection.
      : $collection corresponds to the relative collection path (i.e. after $config:data-root). 
@@ -439,16 +484,16 @@ declare function config:default-config($docUri as xs:string?) {
         "fill": $config:pagination-fill,
         "template": $config:default-template
     }
-    let $collection := 
-        if (exists($docUri)) then
-            replace($docUri, "^(.*)/[^/]+$", "$1") => substring-after($config:data-root || "/")
-        else
-            ()
+    let $collection :=
+    if (exists($docUri)) then
+        replace($docUri, "^(.*)/[^/]+$", "$1") => substring-after($config:data-root || "/")
+    else
+        ()
     let $collectionConfig :=
-        if (exists($docUri)) then
-            config:collection-config($collection, substring-after($docUri, $config:data-root || "/"))
-        else
-            config:collection-config((), ())
+    if (exists($docUri)) then
+        config:collection-config($collection, substring-after($docUri, $config:data-root || "/"))
+    else
+        config:collection-config((), ())
     return
         if (exists($collectionConfig)) then
             map:merge(($defaultConfig, $collectionConfig))
@@ -458,10 +503,12 @@ declare function config:default-config($docUri as xs:string?) {
 
 declare function config:document-type($div as element()) {
     switch (namespace-uri($div))
-        case "http://www.tei-c.org/ns/1.0" return
-            "tei"
-        case "http://docbook.org/ns/docbook" return
-            "docbook"
+        case "http://www.tei-c.org/ns/1.0"
+            return
+                "tei"
+        case "http://docbook.org/ns/docbook"
+            return
+                "docbook"
         default return
             "jats"
 };
@@ -469,10 +516,11 @@ declare function config:document-type($div as element()) {
 declare function config:get-document($idOrName as xs:string) {
     if ($config:address-by-id) then
         root(collection($config:data-root)/id($idOrName))
-    else if (starts-with($idOrName, '/')) then
-        doc(xmldb:encode-uri($idOrName))
     else
-        doc(xmldb:encode-uri($config:data-root || "/" || $idOrName))
+        if (starts-with($idOrName, '/')) then
+            doc(xmldb:encode-uri($idOrName))
+        else
+            doc(xmldb:encode-uri($config:data-root || "/" || $idOrName))
 };
 
 (:~
@@ -486,11 +534,14 @@ declare function config:get-id($node as node()) {
 (:~
  : Returns a path relative to $config:data-root used to locate a document in the database.
  :)
- declare function config:get-relpath($node as node()) {
-     let $root := if (ends-with($config:data-root, "/")) then $config:data-root else $config:data-root || "/"
-     return
-         substring-after(document-uri(root($node)), $root)
- };
+declare function config:get-relpath($node as node()) {
+    let $root := if (ends-with($config:data-root, "/")) then
+        $config:data-root
+    else
+        $config:data-root || "/"
+    return
+        substring-after(document-uri(root($node)), $root)
+};
 
 declare function config:get-identifier($node as node()) {
     if ($config:address-by-id) then
@@ -530,10 +581,16 @@ declare %templates:wrap function config:app-title($node as node(), $model as map
 };
 
 declare function config:app-meta($node as node(), $model as map(*)) as element()* {
-    <meta xmlns="http://www.w3.org/1999/xhtml" name="description" content="{$config:repo-descriptor/repo:description/text()}"/>,
+    <meta
+        xmlns="http://www.w3.org/1999/xhtml"
+        name="description"
+        content="{$config:repo-descriptor/repo:description/text()}"/>,
     for $author in $config:repo-descriptor/repo:author
     return
-        <meta xmlns="http://www.w3.org/1999/xhtml" name="creator" content="{$author/text()}"/>
+        <meta
+            xmlns="http://www.w3.org/1999/xhtml"
+            name="creator"
+            content="{$author/text()}"/>
 };
 
 (:~
@@ -544,7 +601,8 @@ declare function config:app-info($node as node(), $model as map(*)) {
     let $expath := config:expath-descriptor()
     let $repo := config:repo-descriptor()
     return
-        <table class="app-info">
+        <table
+            class="app-info">
             <tr>
                 <td>app collection:</td>
                 <td>{$config:app-root}</td>
@@ -559,7 +617,7 @@ declare function config:app-info($node as node(), $model as map(*)) {
             }
             <tr>
                 <td>Controller:</td>
-                <td>{ request:get-attribute("$exist:controller") }</td>
+                <td>{request:get-attribute("$exist:controller")}</td>
             </tr>
         </table>
 };
@@ -567,7 +625,9 @@ declare function config:app-info($node as node(), $model as map(*)) {
 (: Try to dynamically determine data directory by calling JMX. :)
 declare function config:get-data-dir() as xs:string? {
     try {
-        let $request := <http:request method="GET" href="http://localhost:{request:get-server-port()}/{request:get-context-path()}/status?c=disk"/>
+        let $request := <http:request
+            method="GET"
+            href="http://localhost:{request:get-server-port()}/{request:get-context-path()}/status?c=disk"/>
         let $response := http:send-request($request)
         return
             if ($response[1]/@status = "200") then
