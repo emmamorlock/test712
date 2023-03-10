@@ -1,4 +1,4 @@
-build
+# build
 transform
 node_modules
 resources/scripts/*.js
